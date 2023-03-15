@@ -104,6 +104,8 @@ const handleNoteView = (e) => {
 
 // Sets the activeNote to and empty object and allows the user to enter a new note
 const handleNewNoteView = (e) => {
+  console.log('New note button clicked'); // Add this line to check if the function is being called
+
   activeNote = {};
   renderActiveNote();
 };

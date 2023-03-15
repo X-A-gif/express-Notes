@@ -27,5 +27,31 @@ router.get('/api/notes', (req, res) => {
   });
 });
 
-module.exports = router;
+router.post('/api/notes', (req, res) => {
+  const { title, text } = req.body;
+  if (!title || !text) {
+    res.status(400).send('Title and text are required');
+    return;
+  }
+  const newNote = { title, text, id: uuidv4() };
+  fs.readFile(notesDB, 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error reading notes data');
+      return;
+    }
+    const parsedNotes = JSON.parse(data);
+    parsedNotes.push(newNote);
+    fs.writeFile(notesDB, JSON.stringify(parsedNotes, null, 4), (writeErr) => {
+      if (writeErr) {
+        console.error(writeErr);
+        res.status(500).send('Error writing new note');
+        return;
+      }
+      const response = { status: 'success', body: newNote };
+      res.status(201).json(response);
+    });
+  });
+});
 
+module.exports = router;
