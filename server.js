@@ -1,17 +1,12 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const router = require('./routes');
+
+const PORT = process.env.PORT || 3001;
 
 app.use(express.static('public'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use('/', router);
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
-});
-
-app.get('/notes', (req, res) => {
-  res.sendFile(__dirname + '/public/notes.html');
-});
-
-app.listen(port, () => {
-  console.log(`Server starting on ${port}`);
-});
+app.listen(PORT, () => console.log(`App listening on port ${PORT}`));
